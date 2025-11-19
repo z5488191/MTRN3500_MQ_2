@@ -224,4 +224,65 @@ int main()
 //    Console::WriteLine("Press any key to exit...");
 //    Console::ReadKey(true);
 //    return 0;
+
 //}
+
+
+
+// Compile with: /clr
+#include <cmath>
+using namespace System;
+
+// L  wheelbase
+// B  front track (distance between front wheels)
+// deltaDeg  centre steering angle delta in degrees
+void AckermannAngles(double L, double B, double deltaDeg,
+                     double% alphaLDeg, double% alphaRDeg)
+{
+    // convert centre angle to radians
+    double deltaRad = deltaDeg * Math::PI / 180.0;
+
+    // radius to the centre of the rear axle
+    double R = L / Math::Tan(deltaRad);
+
+    // radii to inner and outer front wheels
+    double RL = R - B / 2.0;   // left  wheel
+    double RR = R + B / 2.0;   // right wheel
+
+    // steering angles of left and right front wheels (radians)
+    double alphaL = Math::Atan(L / RL);
+    double alphaR = Math::Atan(L / RR);
+
+    // back to degrees
+    alphaLDeg = alphaL * 180.0 / Math::PI;
+    alphaRDeg = alphaR * 180.0 / Math::PI;
+}
+
+int main(array<String^>^)
+{
+    // quiz data (millimetres and degrees)
+    double Lmm      = 800.0;   // wheelbase
+    double Bmm      = 350.0;   // front track
+    double deltaDeg = 30.0;    // commanded steering delta
+
+    // convert mm to m
+    double L = Lmm / 1000.0;
+    double B = Bmm / 1000.0;
+
+    double alphaL;
+    double alphaR;
+
+    AckermannAngles(L, B, deltaDeg, alphaL, alphaR);
+
+    Console::WriteLine("L      = {0:F3} m", L);
+    Console::WriteLine("B      = {0:F3} m", B);
+    Console::WriteLine("deltaC = {0:F3} deg", deltaDeg);
+    Console::WriteLine();
+    Console::WriteLine("alpha_L (left front)  = {0:F3} deg", alphaL);
+    Console::WriteLine("alpha_R (right front) = {0:F3} deg", alphaR);
+
+    Console::WriteLine();
+    Console::WriteLine("Press any key to exit...");
+    Console::ReadKey(true);
+    return 0;
+}
