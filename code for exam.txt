@@ -1,0 +1,227 @@
+﻿//#include <iostream>
+//
+//void Add(int& a, int& b, int& c)
+//{
+//    c = a + b++;
+//}
+//
+//
+//int main() {
+//    int a = 5, b = 6, c = 7;
+//    Add(a, b, c);
+//    std::cout << a << "," << b << "," << c << std::endl;
+//    
+//}
+
+
+
+
+// Compile with /clr
+
+
+//using namespace System;
+//
+//int main(array<String^>^ args)
+//{
+//    // Step 1: store the float value
+//    float value = 23.5f;
+//    Console::WriteLine("Value = {0}", value);
+//
+//    // Step 2: get the raw 4 bytes using BitConverter (similar idea to ToDouble in the slides)
+//    array<unsigned char>^ bytes = BitConverter::GetBytes(value);
+//
+//    Console::Write("Bytes (little endian) = ");
+//    for (int i = 0; i < bytes->Length; ++i)
+//    {
+//        Console::Write("{0:X2} ", bytes[i]);
+//    }
+//    Console::WriteLine();
+//
+//    // Step 3: combine the 4 bytes into one 32 bit unsigned integer
+//    // This is the IEEE 754 bit pattern for the float
+//    unsigned int word = BitConverter::ToUInt32(bytes, 0);
+//
+//    Console::WriteLine("IEEE754 hex (32 bit) = 0x{0:X8}", word);
+//
+//    // Step 4: extract sign, exponent, mantissa fields
+//    int sign     = (word >> 31) & 0x1;
+//    int exponent = (word >> 23) & 0xFF;
+//    int mantissa = word & 0x7FFFFF;
+//
+//    Console::WriteLine("Sign bit      = {0}", sign);
+//    Console::WriteLine("Exponent bits = 0x{0:X2} (decimal {1})", exponent, exponent);
+//    Console::WriteLine("Mantissa bits = 0x{0:X6}", mantissa);
+//
+//    return 0;
+//}
+
+
+//using namespace System;
+//
+//int main(array<String^>^ args)
+//{
+//    float Value = 23.5f;
+//
+//    // Pointer to the raw bytes of the float
+//    unsigned char* BPtr = reinterpret_cast<unsigned char*>(&Value);
+//
+//    Console::Write("Bytes (little endian): ");
+//    for (int i = 0; i < sizeof(float); i++)
+//    {
+//        Console::Write("{0:X2} ", *BPtr++);
+//    }
+//    Console::WriteLine();
+//    Console::ReadKey(true);
+//    return 0;
+//}
+
+
+using namespace System;
+
+
+int main()
+{
+
+
+    unsigned char Data[4] = { 0x00,0x00, 0xbc,0x41 };
+    float Value;
+    unsigned char* BPtr = (unsigned char*)&Value;
+    for (int i = 0; i < sizeof(float); i++)
+    {
+        *(BPtr + i) = Data[i];
+    }
+
+
+    Console::WriteLine("little endian format (transmits each value with the least significant byte first) ");
+    Console::WriteLine(Value.ToString("F3"));
+
+
+    Console::ReadKey();
+
+
+    return 0;
+}
+
+
+// /clr
+
+
+//using namespace System;
+//
+//int main(array<String^>^ args)
+//{
+//    // given data
+//    double startAngleDeg = 0.0;     // first data value at 0 degrees
+//    double resolutionDeg = 0.5;     // degrees between readings
+//    int dataNumber = 75;            // 75th data value
+//    String^ hexRange = "960";       // range value in hexadecimal
+//
+//    // index of this reading in the array (first value is index 0)
+//    int i = dataNumber - 1;
+//
+//    // convert range from hex to decimal, then to meters
+//    int rangeRaw = System::Convert::ToInt32(hexRange, 16);   // 0x960 = 2400
+//    double rangeMeters = rangeRaw / 1000.0;                  // assume mm to m
+//
+//    // angle of this beam in degrees and radians
+//    double angleDeg = startAngleDeg + i * resolutionDeg;
+//    double angleRad = angleDeg * Math::PI / 180.0;
+//
+//    // coordinates as in the lecture code:
+//    // RangeX[i] = Range[i] * sin(i * Resolution);
+//    // RangeY[i] = -Range[i] * cos(i * Resolution);
+//    double x = rangeMeters * Math::Sin(angleRad);
+//    double y = -rangeMeters * Math::Cos(angleRad);
+//
+//    Console::WriteLine("Angle (deg) = {0:F3}", angleDeg);
+//    Console::WriteLine("Range (m)   = {0:F3}", rangeMeters);
+//    Console::WriteLine("x coordinate = {0:F3} m", x);
+//    Console::WriteLine("y coordinate = {0:F3} m", y);
+//
+//    Console::WriteLine();
+//    Console::WriteLine("Press any key to exit...");
+//    Console::ReadKey();
+//
+//    return 0;
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//// Compile with: /clr
+//#include <cmath>
+//using namespace System;
+//
+//// Compute Ackermann steering angles (degrees)
+//void AckermannAngles(double L, double W, double deltaDeg,
+//    double% alphaLDeg, double% alphaRDeg)
+//{
+//    // Convert centre steering angle from degrees to radians
+//    double deltaRad = deltaDeg * Math::PI / 180.0;
+//
+//    // Radius of the centre of the rear axle
+//    double R = L / Math::Tan(deltaRad);
+//
+//    // Radii to the inner and outer front wheels
+//    double RL = R - W / 2.0;   // left
+//    double RR = R + W / 2.0;   // right
+//
+//    // Steering angles for left and right front wheels
+//    double alphaL = Math::Atan(L / RL);  // radians
+//    double alphaR = Math::Atan(L / RR);  // radians
+//
+//    // Convert back to degrees
+//    alphaLDeg = alphaL * 180.0 / Math::PI;
+//    alphaRDeg = alphaR * 180.0 / Math::PI;
+//}
+//
+//int main(array<String^>^ args)
+//{
+//    // Example values from the quiz
+//    // L = 800 mm, W = 400 mm, delta = 30 degrees
+//    // You can change these or later read them from the user
+//    double Lmm = 800.0;
+//    double Wmm = 400.0;
+//    double deltaDeg = 30.0;
+//
+//    // Use metres internally if you prefer
+//    double L = Lmm / 1000.0;
+//    double W = Wmm / 1000.0;
+//
+//    double alphaLDeg;
+//    double alphaRDeg;
+//
+//    AckermannAngles(L, W, deltaDeg, alphaLDeg, alphaRDeg);
+//
+//    Console::WriteLine("Ackermann steering example");
+//    Console::WriteLine("L      = {0:F3} m", L);
+//    Console::WriteLine("W      = {0:F3} m", W);
+//    Console::WriteLine("deltaC = {0:F3} deg", deltaDeg);
+//    Console::WriteLine();
+//
+//    Console::WriteLine("Left  wheel angle  alpha_L = {0:F3} deg", alphaLDeg);
+//    Console::WriteLine("Right wheel angle  alpha_R = {0:F3} deg", alphaRDeg);
+//
+//    Console::WriteLine();
+//    Console::WriteLine("Press any key to exit...");
+//    Console::ReadKey(true);
+//    return 0;
+//}
